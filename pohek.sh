@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 args=($@)
-rm out.txt >> /dev/null
+rm out.txt 2> /dev/null
 if ! which ffuf > /dev/null || ! which jq > /dev/null || ! which nmap > /dev/null || ! which hashcat > /dev/null; then
    echo -e "Some packages not found! Install? (y/n) \c"
    read
@@ -14,7 +14,7 @@ elif [ "$REPLY" = "n" ] || [ "$REPLY" = "" ]
 fi
 if [[ $1 = "--help" ]] || [[ $1 = "-h" ]] || [[ $1 = "" ]]
 then
-echo "pohek (URL without https) (Path to the ffuf wordlist) or --i or --install for installing to /usr/bin; --hashcat for the hashcat mode (hashcat hash id) (path for hash) (path for wordlist)" && exit 0
+echo "pohek (URL without https) (Path to the ffuf wordlist) or --i or --install for installing to /usr/bin; --hashcat for the hashcat mode (hashcat hash id) (path for hash) (path for wordlist); -d for downloading dictionaries into the current directory" && exit 0
 elif [[ $1 = "-i" ]] || [[ $1 = "--install" ]]
 then
 if which /usr/bin/pohek > /dev/null
@@ -28,6 +28,14 @@ then
 echo "hashcat mode!"
 hashcat -m $2 -a 0 --quiet -o out-hash.txt -w 4 -O $3 $4
 echo "hashcat done"
+exit 0
+fi
+if [[ $1 = "-d" ]]
+then
+mkdir dicks
+curl -L -s -o dicks/rockyou.txt https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt
+curl -L -s -o dicks/large.txt https://raw.githubusercontent.com/avada-z/pohek/main/large.txt
+curl -L -s -o dicks/small-test-only.txt https://raw.githubusercontent.com/avada-z/pohek/main/small.txt
 exit 0
 fi
 if [[$1 !=  "--hashcat" ]]
