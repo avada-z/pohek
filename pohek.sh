@@ -27,7 +27,8 @@ if [[ $1 = "--hashcat" ]]
 then
 echo "hashcat mode!"
 hashcat -m $2 -a 0 --quiet -o out-hash.txt -w 4 -O $3 $4
-exit
+echo "hashcat done"
+exit 0
 fi
 if [[$1 !=  "--hashcat" ]]
 then
