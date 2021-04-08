@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 args=($@)
 rm out.txt >> /dev/null
-if ! which ffuf > /dev/null || ! which jq > /dev/null || ! which nmap > /dev/null || ! which hashcat > /dev/null || ! which hashcat-nvidia > /dev/null; then
+if ! which ffuf > /dev/null || ! which jq > /dev/null || ! which nmap > /dev/null || ! which hashcat > /dev/null; then
    echo -e "Some packages not found! Install? (y/n) \c"
    read
    if [ "$REPLY" = "y" ] || [ "$REPLY" = "Y" ] 
@@ -27,7 +27,10 @@ if [[ $1 = "--hashcat" ]]
 then
 echo "hashcat mode!"
 hashcat -m $2 -a 0 --quiet -o out-hash.txt -w 4 -O $3 $4
+exit
 fi
+if [[$1 !=  "--hashcat" ]]
+then
 nmap -O -sV $1 > out1.txt
 echo "nmap done"
 ffuf -u https://$1/FUZZ -w $2 -o $1.json $1.html -of json html -sf true -mc 200,403 >> /dev/null
@@ -37,4 +40,5 @@ echo "ffuf output filtered"
 dirdar -only-ok -wl dirdar-$1.txt -single https://$1/ > out3.txt
 echo "dirdar done"
 cat out1.txt out2.txt out3.txt out-hash.txt 1> out.txt
-rm out1.txt out2.txt out3.txt dirdar-$1.txt
+fi
+rm out1.txt out2.txt out3.txt dirdar-$1.txt > /dev/null
