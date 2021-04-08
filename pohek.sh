@@ -44,7 +44,7 @@ exit 0
 fi
 if [[ $1 = "--m8" ]]
 then
-if which /usr/bin/checkm8 > /dev/null
+if [ ! -f /usr/bin/checkm8 ] > /dev/null
 then
 git clone https://github.com/pgarba/King.git .king
 sudo apt install libusb-1.0-0-dev libusb-1.0-0 cmake -y
