@@ -1,3 +1,6 @@
+!!CLOSED because BRUH!!
+
+
 POHEK is the not-framework lifehack and hack helper.
 
 The installation is quite simple: 
